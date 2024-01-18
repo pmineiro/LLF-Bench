@@ -311,7 +311,7 @@ class Tanka(Haiku):
 
 class LineSyllableConstrainedPoem(Haiku):
     def __init__(self, syllable_req=[7, 7, 7], feedback=0, use_extractor=False,
-                 seed=None):
+                 seed=None, number_of_lines_choices=[3, 4, 5, 14, 15, 19]):
         # We can extend this to add "theme" of the poem
         # This increases difficulty a little, but also hard to check if it's thematic or not.
         super().__init__(feedback, use_extractor, seed=seed)
@@ -323,6 +323,7 @@ class LineSyllableConstrainedPoem(Haiku):
         self.form_name = 'poem'
 
         self._seed = self.seed(seed)
+        self._number_of_lines_choices = number_of_lines_choices
 
     def reset(self, **kwargs):
         if 'seed' in kwargs:
@@ -330,7 +331,7 @@ class LineSyllableConstrainedPoem(Haiku):
 
         # create a sampling space
         # Haiku: 3, Tanka: 5, Sonnet: 14, Villanelle: 19, Ballad: 4, Ghazal: 15
-        number_of_lines = self._np_random.choice([3, 4, 5, 14, 15, 19])
+        number_of_lines = self._np_random.choice(self._number_of_lines_choices)
         # https://www.writing.upenn.edu/~afilreis/88/meter.html
         syllable_sample_space = [5, 7, 8, 9, 10, 17]
 
