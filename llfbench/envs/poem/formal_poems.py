@@ -323,7 +323,15 @@ class LineSyllableConstrainedPoem(Haiku):
         self.form_name = 'poem'
 
         self._seed = self.seed(seed)
-        self._number_of_lines_choices = number_of_lines_choices
+        self.number_of_lines_choices = number_of_lines_choices
+
+    @property
+    def number_of_lines_choices(self):
+        return self._number_of_lines_choices
+
+    @number_of_lines_choices.setter
+    def number_of_lines_choices(self, value):
+        self._number_of_lines_choices = value
 
     def reset(self, **kwargs):
         if 'seed' in kwargs:
