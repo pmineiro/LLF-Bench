@@ -311,7 +311,9 @@ class Tanka(Haiku):
 
 class LineSyllableConstrainedPoem(Haiku):
     def __init__(self, syllable_req=[7, 7, 7], feedback=0, use_extractor=False,
-                 seed=None, number_of_lines_choices=[3, 4, 5, 14, 15, 19]):
+                 seed=None, 
+                 number_of_lines_choices=[3, 4, 5, 14, 15, 19],
+                 syllable_sample_space = [5, 7, 8, 9, 10, 17]):
         # We can extend this to add "theme" of the poem
         # This increases difficulty a little, but also hard to check if it's thematic or not.
         super().__init__(feedback, use_extractor, seed=seed)
@@ -324,6 +326,15 @@ class LineSyllableConstrainedPoem(Haiku):
 
         self._seed = self.seed(seed)
         self.number_of_lines_choices = number_of_lines_choices
+        self.syllable_sample_space = syllable_sample_space
+
+    @property
+    def syllable_sample_space(self):
+        return self._syllable_sample_space
+
+    @syllable_sample_space.setter
+    def syllable_sample_space(self, value):
+        self._syllable_sample_space = value
 
     @property
     def number_of_lines_choices(self):
@@ -341,11 +352,10 @@ class LineSyllableConstrainedPoem(Haiku):
         # Haiku: 3, Tanka: 5, Sonnet: 14, Villanelle: 19, Ballad: 4, Ghazal: 15
         number_of_lines = self._np_random.choice(self._number_of_lines_choices)
         # https://www.writing.upenn.edu/~afilreis/88/meter.html
-        syllable_sample_space = [5, 7, 8, 9, 10, 17]
 
         syllable_req = []
         for _ in range(number_of_lines):
-            syllable_req.append(self._np_random.choice(syllable_sample_space))
+            syllable_req.append(self._np_random.choice(self.syllable_sample_space))
 
         self.syllable_req_str = [str(i) for i in syllable_req]
         self.syllable_req = syllable_req
